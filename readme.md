@@ -1,4 +1,5 @@
 # flex进行词法分析，bison语法分析,生成三地址代码(中间代码)
+env:vscode,macOS
 # 编译
 flex lexer.l
 bison -d  parse.y
