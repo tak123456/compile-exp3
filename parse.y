@@ -26,7 +26,7 @@ extern int numLines;
         struct translate *attr;
         int instr;
 }
-
+//终结符
 %token T_TURE
 %token T_FALSE
 %token <name> T_TYPE
@@ -65,7 +65,7 @@ extern int numLines;
 %token T_ERROR
 %token T_BREAK
 %token T_CONTINUE
-
+//优先级从低到高,结合性:left,right,级联
 %nonassoc T_ID
 %left T_COMMA
 %right T_ASSIGNOP
@@ -80,7 +80,7 @@ extern int numLines;
 %right UMINUS
 %left T_LEFTPAREN T_RIGHTPAREN
 %left T_LEFTBRACKET T_RIGHTBRACKET
-
+//非终结符
 %type <attr> expression if_stmt while_loop N other statements block func_call
 %type <instr> M
 
@@ -317,7 +317,17 @@ void assign(int *a,int *na,int *b,int nb){
         i++;
     }
 }
-
+//打印所有符号表中的所有符号的信息
+void printSym(){
+    for (int i=0;i<=maxTable;i++){
+        printf("symbol table of %s:\n",sTables[i].name);
+        printf("No. %d  pre: %d\n",i,sTables[i].pre);
+        for (int j=0;j<sTables[i].top;j++)
+            printf("%-15s%-15s%-15lf\n",sTables[i].sym[j].name,sTables[i].sym[j].type,sTables[i].sym[j].value);
+        printf("*****************************************\n\n");
+    }
+}
+//主函数,输入源文件进行分析
 int main(int argc,char *argv[]) {
     //初始化翻译三地址代码表和符号表
     for(int i=0;i<1000;i++){
@@ -346,14 +356,4 @@ int main(int argc,char *argv[]) {
         printf("%d: %s\n",IntermediateLanguage[i].no,IntermediateLanguage[i].sentence);
     }
     return result;
-}
-//打印所有符号表中的所有符号的信息
-void printSym(){
-    for (int i=0;i<=maxTable;i++){
-        printf("symbol table of %s:\n",sTables[i].name);
-        printf("No. %d  pre: %d\n",i,sTables[i].pre);
-        for (int j=0;j<sTables[i].top;j++)
-            printf("%-15s%-15s%-15lf\n",sTables[i].sym[j].name,sTables[i].sym[j].type,sTables[i].sym[j].value);
-        printf("*****************************************\n\n");
-    }
 }

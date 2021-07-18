@@ -2105,7 +2105,7 @@ void yyerror(const char* msg) {
         printf("%s\n",msg);
         exit(1);
 }
-//根据name在当前符号表和之前的符号表中查找符号,返回下标
+//根据name在当前符号表和之前的符号表中查找符号,返回下标,不存在返回-1
 int symlook(char *name)
 {
     int now = nowTable;
@@ -2120,7 +2120,7 @@ int symlook(char *name)
     }
     return -1;
 }
-//根据name在当前符号表中查找符号,返回下标
+//根据name在当前符号表中查找符号,返回下标,不存在返回-1
 int symLookNow(char *name){
     for (int j=0;j<sTables[nowTable].top;j++)
         if (!strcmp(sTables[nowTable].sym[j].name, name))
@@ -2136,9 +2136,9 @@ void pushTable(char *name){
         yyerror("symbol tables stack is full!\n");
     }else{
         maxTable++;
-        tmp = nowTable;
+        tmp = nowTable;//上一个符号表
         nowTable = maxTable;
-        sTables[nowTable].top = 0;
+        sTables[nowTable].top = 0;//初始化top ,pre , name
         sTables[nowTable].pre = tmp;
         sprintf(sTables[nowTable].name,"%s",name);
     }
@@ -2147,7 +2147,7 @@ void pushTable(char *name){
 void popTable(){
     nowTable = sTables[nowTable].pre;
 }
-//在当前符号表中插入符号
+//在当前符号表中插入符号，返回插入的符号或存在的符号
 struct symbol *symInsert(char *name,char *type,double value)
 {
     if (sTables[nowTable].top==201){
@@ -2221,7 +2221,17 @@ void assign(int *a,int *na,int *b,int nb){
         i++;
     }
 }
-
+//打印所有符号表中的所有符号的信息
+void printSym(){
+    for (int i=0;i<=maxTable;i++){
+        printf("symbol table of %s:\n",sTables[i].name);
+        printf("No. %d  pre: %d\n",i,sTables[i].pre);
+        for (int j=0;j<sTables[i].top;j++)
+            printf("%-15s%-15s%-15lf\n",sTables[i].sym[j].name,sTables[i].sym[j].type,sTables[i].sym[j].value);
+        printf("*****************************************\n\n");
+    }
+}
+//主函数,输入源文件进行分析
 int main(int argc,char *argv[]) {
     //初始化翻译三地址代码表和符号表
     for(int i=0;i<1000;i++){
@@ -2235,6 +2245,7 @@ int main(int argc,char *argv[]) {
     }
     sTables[nowTable].top = 0;
     sprintf(sTables[nowTable].name,"%s","global");
+    //提前插入Print函数
     symInsert("Print","func",0);
     //词法分析和语法分析，中间代码生成
     if (argc==2){
@@ -2250,13 +2261,4 @@ int main(int argc,char *argv[]) {
     }
     return result;
 }
-//打印所有符号表中的所有符号的信息
-void printSym(){
-    for (int i=0;i<=maxTable;i++){
-        printf("symbol table of %s:\n",sTables[i].name);
-        printf("No. %d  pre: %d\n",i,sTables[i].pre);
-        for (int j=0;j<sTables[i].top;j++)
-            printf("%-15s%-15s%-15lf\n",sTables[i].sym[j].name,sTables[i].sym[j].type,sTables[i].sym[j].value);
-        printf("*****************************************\n\n");
-    }
-}
+
