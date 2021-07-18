@@ -1,0 +1,33 @@
+int p;
+int fact(int n,int m){
+	int temp;
+    if(n==1){
+      return n;
+    }
+    temp=(n*fact(n-1,m));
+    return temp;
+}
+
+void main() {
+  int a;
+  int b;
+  p=2;
+  a = 2;
+  b = 1+4*3/2;
+  int x;
+  int y;
+  if (x>50||y<100&&x!=y){
+      a = 11;
+  }
+  a = 12;
+  int c;
+  int result;
+  c = 13;
+  result = fact(a,c);
+  Print(result);
+  while(a<=10){
+    a=a+1;
+  }
+  b=2;
+}
+
