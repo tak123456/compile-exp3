@@ -1,10 +1,10 @@
 int p;
-int fact(int n,int m){
+int fact(int n){
 	int temp;
     if(n==1){
       return n;
     }
-    temp=(n*fact(n-1,m));
+    temp=(n*fact(n-1));
     return temp;
 }
 
@@ -16,14 +16,14 @@ void main() {
   b = 1+4*3/2;
   int x;
   int y;
-  if (x>50||y<100&&x!=y){
+  if (x>50||y<100){
       a = 11;
   }
   a = 12;
   int c;
   int result;
   c = 13;
-  result = fact(a,c);
+  result = fact(a);
   Print(result);
   while(a<=10){
     a=a+1;
